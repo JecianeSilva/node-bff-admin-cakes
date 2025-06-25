@@ -1,0 +1,144 @@
+{
+	"info": {
+		"_postman_id": "70ea6662-eea0-4bf8-b6fa-1d6ac3b86146",
+		"name": "Cake BFF",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "13117445"
+	},
+	"item": [
+		{
+			"name": "Auth - Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const json = pm.response.json();",
+							"if (json.token) {",
+							"  pm.collectionVariables.set(\"token\", json.token);",
+							"  console.log(\"Token salvo:\", json.token);",
+							"} else {",
+							"  console.warn(\"Token não encontrado na resposta.\");",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"email\": \"teste@teste.com\",\n  \"password\": \"teste1234\"\n}"
+				},
+				"url": {
+					"raw": "{{host}}/bff/auth/login",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"bff",
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Auth - Register",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"name\": \"Usuário Teste\",\n  \"email\": \"teste@email.com\",\n  \"password\": \"12345678\",\n  \"phone\": \"81999999999\"\n}"
+				},
+				"url": {
+					"raw": "{{host}}/bff/auth/register",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"bff",
+						"auth",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "products",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/bff/products",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"bff",
+						"products"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "host",
+			"value": "http://localhost:6003"
+		},
+		{
+			"key": "access_token",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImJkZDdhMDg4LWI0NmUtNGZlOC1iNzc1LTAwYmQ5MmQ0MDM3OSIsImVtYWlsIjoidGVzdGVAdGVzdGUuY29tIiwiaWF0IjoxNzUwODEwMTY2LCJleHAiOjE3NTA4OTY1NjZ9.6kjWHrXDkkb9sfnNCv1BNLmr053EzVpLjb1DAK2KyPk"
+		}
+	]
+}
