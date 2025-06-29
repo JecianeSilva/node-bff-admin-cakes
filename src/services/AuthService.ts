@@ -1,3 +1,4 @@
+import { handleApiError } from '../utils/handleApiError';
 import api from './ApiService';
 
 interface AuthResponse {
@@ -7,22 +8,44 @@ interface AuthResponse {
 
 class AuthService {
   async login(email: string, password: string): Promise<AuthResponse> {
-    const { data } = await api.post('/auth/login', { email, password });
-
-    const accessToken = data?.access_token;
-    if (!accessToken) {
-      throw new Error('Token de acesso não recebido da API principal');
+    try {
+      const { data } = await api.post('/auth/login', { email, password });
+      return data;
+    } catch (err) {
+      handleApiError(err);
     }
-
-    return {
-      access_token: accessToken,
-      refresh_token: data?.refresh_token,
-    };
   }
 
   async register(userData: Record<string, any>): Promise<any> {
-    const { data } = await api.post('/auth/register', userData);
-    return data;
+    try {
+      const { data } = await api.post('/auth/register', userData);
+      return data;
+    } catch (err) {
+      handleApiError(err);
+    }
+  }
+
+  async resetPassword(email: string, newPassword: string): Promise<any> {
+    try {
+      const { data } = await api.post('/auth/reset-password', {
+        email,
+        newPassword
+      });
+      return data;
+    } catch (err) {
+      handleApiError(err);
+    }
+  }
+
+  async refreshToken(refreshToken: string): Promise<AuthResponse> {
+    try {
+      const { data } = await api.post('/auth/refresh-token', {
+        refreshToken
+      });
+      return data;
+    } catch (err) {
+      handleApiError(err);
+    }
   }
 }
 
