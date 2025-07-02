@@ -1,23 +1,18 @@
-import { authenticate } from './middlewares/authMiddleware';
-import express from 'express';
 import cors from 'cors';
-import helmet from 'helmet';
-import morgan from 'morgan';
+import { ValidationPipe } from '@nestjs/common';
+import { NestFactory } from '@nestjs/core';
+import { ConfigService } from '@nestjs/config';
+import { AppModule } from './app.module';
+import CONFIG from './config';
 
-import config from './config/config';
-import authRoutes from './routes/authRoutes';
-import productRoutes from './routes/productRoutes';
+async function bootstrap() {
+  const context = CONFIG.APP.CONTEXTO 
+  const app = await NestFactory.create(AppModule);
+  app.setGlobalPrefix(`${context}`)
+  app.useGlobalPipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }));
+  const configService = app.get(ConfigService);
 
-const app = express();
-
-app.use(cors());
-app.use(helmet());
-app.use(morgan('dev'));
-app.use(express.json());
-
-app.use('/bff/auth', authRoutes);
-app.use('/bff/products', authenticate, productRoutes);
-
-app.listen(config.port, () => {
-  console.log(`🚀 BFF rodando na porta ${config.port}`);
-});
+  app.use(cors({}));
+  await app.listen(configService.get<number>('PORT') || 3000);
+}
+bootstrap();

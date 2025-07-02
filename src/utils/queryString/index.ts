@@ -1,1 +1,1 @@
-export *  as queryString from 'querystring'
+export * as queryString from 'querystring'

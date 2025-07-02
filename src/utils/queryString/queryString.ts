@@ -1,5 +1,5 @@
 function _isObject(value: unknown) {
-  return typeof value === 'object' && value !== null && !Array.isArray(value)
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
 }
 export function encode(params?: Object): string {
   if(!params){
@@ -13,14 +13,15 @@ export function encode(params?: Object): string {
       const value = params[key as keyof typeof params];
 
       if(_isObject(value)) {
-        continue
+        continue;
       }
 
       if(Array.isArray(value)) {
         (value as string[]).forEach((item: string) => {
-          keyValuePairs.push(`${key}=${value}`)
+          keyValuePairs.push(`${key}=${item}`)
         });
-      } else if(typeof value === 'boolean' || value || value === 0){
+      } else if (typeof value === 'boolean' || value){
+      // } else if (typeof value === 'boolean' || value || value === 0 ){
         keyValuePairs.push(`${key}=${value}`)
       }
     }
