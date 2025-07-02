@@ -1,6 +1,8 @@
 import { Controller, Get, Inject, Query, UseInterceptors } from '@nestjs/common';
-import { IGetProductsResponse, IProductService } from '../client/interfaces/ProductInterface';
+import { GetProductQueryParamsSchema, TGetProductQueryParam, TGetProductResponse } from 'cakes-lib-types-js';
+import { IProductService } from '../client/interfaces/ProductInterface';
 import { HttpServiceInterceptor } from '../middlewares/interceptor';
+import { ZodValidationPipe } from '../utils';
 
 @UseInterceptors(HttpServiceInterceptor)
 @Controller('/products')
@@ -11,11 +13,9 @@ export class ProductController {
   ) {}
   @Get()
   async getProducts(
-    @Query()
-    queryParams: any
-    // @Query(new ZodValidationPipe(GetProductQueryParamSchema))
-    // queryParams: TGetProductQueryParam
-  ): Promise<IGetProductsResponse> {
-    return await this.productService.getProducts(queryParams.active)
+    @Query(new ZodValidationPipe(GetProductQueryParamsSchema))
+    queryParams: TGetProductQueryParam
+  ): Promise<TGetProductResponse> {
+    return await this.productService.getProducts(queryParams.status)
   }
 }

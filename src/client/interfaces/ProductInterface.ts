@@ -1,19 +1,8 @@
-export interface IGetProductsResponse {
-  products: IProduct
-}
+import { TGetProductQueryParam } from "cakes-lib-types-js"
+
 export interface IProductsClient {
-  getProducts(active: boolean): Promise<IGetProductsResponse>
+  getProducts(status: string): Promise<TGetProductQueryParam>
 }
 export interface IProductService {
-  getProducts(active: boolean): Promise<IGetProductsResponse>
-}
-
-export interface IProduct {
-  id: number;
-  name: string;
-  description: string;
-  price: number;
-  image: string;
-  categoryId: number;
-  available: boolean;
+  getProducts(status: string): Promise<TGetProductQueryParam>
 }

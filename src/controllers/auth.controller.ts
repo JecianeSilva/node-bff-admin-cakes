@@ -1,8 +1,7 @@
-import { Body, Controller, Inject, Post, Res } from '@nestjs/common';
+import { Body, Controller, HttpCode, Inject, Post } from '@nestjs/common';
+import { PostLoginRequestBodySchema, TPostLoginRequestBody, IPostLoginResponse } from 'cakes-lib-types-js';
 import { ZodValidationPipe } from '../utils';
-import { LoginSchema, LoginDTO } from 'cakes-lib-types-js';
-import { IAuthResponse, IAuthService } from '../client/interfaces/AuthInterface';
-import { Response } from 'express';
+import { IAuthService } from '../client/interfaces/AuthInterface';
 
 @Controller('/auth')
 export class AuthController {
@@ -12,12 +11,12 @@ export class AuthController {
   ) {}
 
   @Post('login')
+  @HttpCode(200)
   async login(
-    @Body(new ZodValidationPipe(LoginSchema)) body: LoginDTO,
-    @Res() res: Response, 
-  ): Promise<IAuthResponse> {
+    @Body(new ZodValidationPipe(PostLoginRequestBodySchema)) 
+    body: TPostLoginRequestBody,
+  ): Promise<IPostLoginResponse> {
     const response = await this.authService.login(body.email, body.password);
-    res.status(response.status).json(response.data);
     return response.data
   }
 }
