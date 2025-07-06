@@ -1,8 +1,8 @@
-import { TGetProductQueryParam } from "cakes-lib-types-js"
+import { TGetProductQueryParam, TGetProductsResponse } from "cakes-lib-types-js"
 
 export interface IProductsClient {
-  getProducts(status: string): Promise<TGetProductQueryParam>
+  getProducts(queryParams: TGetProductQueryParam): Promise<TGetProductsResponse>
 }
 export interface IProductService {
-  getProducts(status: string): Promise<TGetProductQueryParam>
+  getProducts(queryParams: TGetProductQueryParam): Promise<TGetProductsResponse>
 }

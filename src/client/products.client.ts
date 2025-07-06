@@ -1,7 +1,8 @@
-import { IGetProductsResponse, IProductsClient } from './interfaces/ProductInterface';
+import { IProductsClient } from './interfaces/ProductInterface';
 import { IHttpClientService } from '../service/http-client.service';
 import { Inject, Injectable } from "@nestjs/common";
 import { queryString } from '../utils/queryString';
+import { TGetProductQueryParam, TGetProductsResponse } from 'cakes-lib-types-js';
 
 @Injectable()
 export class ProductsClient implements IProductsClient {
@@ -10,9 +11,9 @@ export class ProductsClient implements IProductsClient {
     private readonly HttpClientService: IHttpClientService
   ) {}
 
-  async getProducts(active: boolean): Promise<IGetProductsResponse> {
-    const { data } = await this.HttpClientService.get<IGetProductsResponse>(
-      `${process.env.API_BASE_URL}/products`,
+  async getProducts(queryParams: TGetProductQueryParam): Promise<TGetProductsResponse> {
+    const { data } = await this.HttpClientService.get<TGetProductsResponse>(
+      `${process.env.API_BASE_URL}/products?${queryString.encode(queryParams)}`,
     )
     return data
   }

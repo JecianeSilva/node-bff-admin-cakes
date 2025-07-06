@@ -1,26 +1,20 @@
 import { Inject, Injectable } from "@nestjs/common";
+import { TGetProductQueryParam, TGetProductsResponse } from "cakes-lib-types-js";
+import { IProductsClient } from "../client/interfaces/ProductInterface";
 
-interface IGetProductsResponse {
-  name: string
-}
-
-interface IProductClient {
-  getProducts(active: boolean): Promise<IGetProductsResponse>
-}
-
-interface IProductService {
-  getProducts(active: boolean): Promise<IGetProductsResponse>
+export interface IProductService {
+  getProducts(queryParams: TGetProductQueryParam): Promise<TGetProductsResponse>
 }
 
 @Injectable()
 export class ProductService implements IProductService {
   constructor(
     @Inject('IProductsClient')
-    private readonly productsClient: IProductClient
+    private readonly productsClient: IProductsClient
   ) {}
 
-  async getProducts(active: boolean): Promise<IGetProductsResponse> {
-    const data = await this.productsClient.getProducts(active)
+  async getProducts(queryParams: TGetProductQueryParam): Promise<TGetProductsResponse> {
+    const data = await this.productsClient.getProducts(queryParams)
     return data
   }
 }
