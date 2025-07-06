@@ -1,20 +1,23 @@
 import { Module } from '@nestjs/common';
 import { HttpModule } from '@nestjs/axios'
 import { ConfigModule } from '@nestjs/config';
+import { APP_INTERCEPTOR } from '@nestjs/core';
 
-import config from './config/config';
-
-import { ProductController } from './controllers/product.controller';
-
-import { ProductService } from './service/product.service';
+import { AuthClient } from './client/auth.client';
 import { AuthService } from './service/auth.service';
-import { HttpClientService } from './service/http-client.service';
+import { AuthController } from './controllers/auth.controller';
 
 import { ProductsClient } from './client/products.client';
-import { AuthClient } from './client/auth.client';
-import { AuthController } from './controllers/auth.controller';
-import { APP_INTERCEPTOR } from '@nestjs/core';
+import { ProductService } from './service/product.service';
+import { ProductController } from './controllers/product.controller';
+
+import { CategoryClient } from './client/category.client';
+import { CategoryService } from './service/category.service';
+import { CategoryController } from './controllers/category.controller';
+
+import { HttpClientService } from './service/http-client.service';
 import { HttpServiceInterceptor } from './middlewares/interceptor';
+import config from './config/config';
 
 @Module({
   imports: [
@@ -26,6 +29,7 @@ import { HttpServiceInterceptor } from './middlewares/interceptor';
   controllers: [
     AuthController,
     ProductController,
+    CategoryController,
   ],
   providers: [
     {
@@ -51,8 +55,17 @@ import { HttpServiceInterceptor } from './middlewares/interceptor';
     {
       provide: 'IProductService',
       useClass: ProductService
+    },
+        {
+      provide: 'ICategoryClient',
+      useClass: CategoryClient,
+    },
+    {
+      provide: 'ICategoryService',
+      useClass: CategoryService
     }
   ],
   exports: [],
 })
+
 export class AppModule {}
