@@ -11,7 +11,7 @@
   export interface IHttpClientService {
     get<T>(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T>>;
     post<T, D = any>(url: string, data?: D, config?: AxiosRequestConfig): Promise<AxiosResponse<T>>;
-    patch<T, D = any>(url: string, data?: D, config?: AxiosRequestConfig): Promise<AxiosResponse<T>>;
+    put<T, D = any>(url: string, data?: D, config?: AxiosRequestConfig): Promise<AxiosResponse<T>>;
     delete<T>(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T>>;
   }
 
@@ -61,12 +61,12 @@
       return response
     }
 
-    async patch<T, D = any>(
+    async put<T, D = any>(
       url: string,
       data?: D,
       config?: AxiosRequestConfig,
     ): Promise<AxiosResponse<T>> {
-      const response: AxiosResponse<T> = await firstValueFrom(this.httpService.patch<T>(url, data, config));
+      const response: AxiosResponse<T> = await firstValueFrom(this.httpService.put<T>(url, data, config));
       return response
     }
 
