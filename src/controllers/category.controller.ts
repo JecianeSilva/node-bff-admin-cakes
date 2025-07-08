@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, HttpCode, Inject, Param, Post, Put, Quer
 import { HttpServiceInterceptor } from '../middlewares/interceptor';
 import { ZodValidationPipe } from '../utils';
 import { ICategoryService } from '../service/category.service';
-import { GetCategoriesQueryParamSchema, ICategory, IPostSaveCategoryResponse, PostSaveCategoryRequestBodySchema, PutCategoryRequestBodySchema, TGetCategoriesQueryParam, TGetCategoriesResponse, TPostSaveCategoryRequestBodySchema, TPutCategoryRequestBodySchema } from 'cakes-lib-types-js';
+import { GetCategoriesQueryParamSchema, ICategory, IPostSaveCategoryResponse, PostSaveCategoryRequestBodySchema, PutCategoryRequestBodySchema, PutCategoryStatusRequestBodySchema, TDeleteCategoryParam, TGetCategoriesQueryParam, TGetCategoriesResponse, TPostSaveCategoryRequestBody, TPutCategoryParam, TPutCategoryRequestBody, TPutCategoryStatusRequestBody } from 'cakes-lib-types-js';
 
 @UseInterceptors(HttpServiceInterceptor)
 @Controller('/category')
@@ -34,7 +34,7 @@ export class CategoryController {
   @HttpCode(201)
   async postSaveCategory(
     @Body(new ZodValidationPipe(PostSaveCategoryRequestBodySchema))
-    body: TPostSaveCategoryRequestBodySchema
+    body: TPostSaveCategoryRequestBody
   ): Promise<IPostSaveCategoryResponse> {
     return await this.categoryService.postSaveCategory(body)
   }
@@ -43,18 +43,27 @@ export class CategoryController {
   @HttpCode(200)
   async updatedCategory(
     @Param('id')
-    id: string,
+    id: TPutCategoryParam,
     @Body(new ZodValidationPipe(PutCategoryRequestBodySchema))
-    body: TPutCategoryRequestBodySchema
+    body: TPutCategoryRequestBody
   ): Promise<void> {
     return await this.categoryService.updateCategory(id, body)
   }
 
+  @Put('/:id/status')
+  @HttpCode(200)
+  async updateCategoryStatus(
+    @Param('id') id: TPutCategoryParam,
+    @Body(new ZodValidationPipe(PutCategoryStatusRequestBodySchema))
+    body: TPutCategoryStatusRequestBody
+  ): Promise<void> {
+    return await this.categoryService.updateCategoryStatus(id, body);
+  }
   @Delete('/:id')
   @HttpCode(200)
   async deleteCategory(
     @Param('id')
-    id: string
+    id: TDeleteCategoryParam
   ): Promise<void> {
     return await this.categoryService.deleteCategory(id)
   }

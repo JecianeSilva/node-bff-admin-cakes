@@ -1,13 +1,14 @@
 import { Inject, Injectable } from "@nestjs/common";
 import { ICategoryClient } from "../client/interfaces/categoryInterface";
-import { ICategory, IPostSaveCategoryResponse, TGetCategoriesQueryParam, TGetCategoriesResponse, TPostSaveCategoryRequestBodySchema, TPutCategoryRequestBodySchema } from "cakes-lib-types-js";
+import { ICategory, IPostSaveCategoryResponse, TDeleteCategoryParam, TDeleteProductParamSchema, TGetCategoriesQueryParam, TGetCategoriesResponse, TPostSaveCategoryRequestBody, TPutCategoryParam, TPutCategoryRequestBody, TPutCategoryStatusRequestBody } from "cakes-lib-types-js";
 
 export interface ICategoryService {
   getCategories(queryParams: TGetCategoriesQueryParam): Promise<TGetCategoriesResponse>
   getCategoryById(id: string): Promise<ICategory>
-  postSaveCategory(body: TPostSaveCategoryRequestBodySchema): Promise<IPostSaveCategoryResponse>
-  updateCategory(id: string, body: TPutCategoryRequestBodySchema): Promise<void>
-  deleteCategory(id: string): Promise<void>
+  postSaveCategory(body: TPostSaveCategoryRequestBody): Promise<IPostSaveCategoryResponse>
+  updateCategory(id: TPutCategoryParam, body: TPutCategoryRequestBody): Promise<void>
+  updateCategoryStatus(id: TPutCategoryParam, status: TPutCategoryStatusRequestBody): Promise<void>;
+  deleteCategory(id: TDeleteCategoryParam): Promise<void>
 }
 
 @Injectable()
@@ -25,15 +26,19 @@ export class CategoryService implements ICategoryService {
       return await this.categoryClient.getCategoryById(id)
   }
 
-  async postSaveCategory(body: TPostSaveCategoryRequestBodySchema): Promise<IPostSaveCategoryResponse> {
+  async postSaveCategory(body: TPostSaveCategoryRequestBody): Promise<IPostSaveCategoryResponse> {
       return await this.categoryClient.postSaveCategory(body)
   }
 
-  async updateCategory(id: string, body: TPutCategoryRequestBodySchema): Promise<void> {
+  async updateCategory(id: TPutCategoryParam, body: TPutCategoryRequestBody): Promise<void> {
       return await this.categoryClient.updateCategory(id, body)
   }
 
-  async deleteCategory(id: string): Promise<void> {
+  async updateCategoryStatus(id: TPutCategoryParam, body: TPutCategoryStatusRequestBody): Promise<void> {
+      return await this.categoryClient.updateCategoryStatus(id, body)
+  }
+
+  async deleteCategory(id: TDeleteCategoryParam): Promise<void> {
       return await this.categoryClient.deleteCategory(id)
   }
 }
