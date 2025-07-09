@@ -2,7 +2,7 @@ import { IHttpClientService } from '../service/http-client.service';
 import { Inject, Injectable } from "@nestjs/common";
 import { queryString } from '../utils/queryString';
 import { ICategoryClient } from './interfaces/categoryInterface';
-import { ICategory, IPostSaveCategoryResponse, TGetCategoriesQueryParam, TGetCategoriesResponse, TPostSaveCategoryRequestBodySchema, TPutCategoryRequestBodySchema } from 'cakes-lib-types-js';
+import { ICategory, IPostSaveCategoryResponse, TDeleteCategoryParam, TGetCategoriesQueryParam, TGetCategoriesResponse, TPostSaveCategoryRequestBody, TPutCategoryParam, TPutCategoryRequestBody, TPutCategoryStatusRequestBody } from 'cakes-lib-types-js';
 
 @Injectable()
 export class CategoryClient implements ICategoryClient {
@@ -28,7 +28,7 @@ export class CategoryClient implements ICategoryClient {
       return data
   }
 
-  async postSaveCategory(body: TPostSaveCategoryRequestBodySchema): Promise<IPostSaveCategoryResponse> {
+  async postSaveCategory(body: TPostSaveCategoryRequestBody): Promise<IPostSaveCategoryResponse> {
       const { data } = await this.HttpClientService.post<IPostSaveCategoryResponse>(
         `${process.env.API_BASE_URL}/categories`,
         body
@@ -36,7 +36,7 @@ export class CategoryClient implements ICategoryClient {
       return data
   }
 
-  async updateCategory(id: string, body: TPutCategoryRequestBodySchema): Promise<void> {
+  async updateCategory(id: TPutCategoryParam, body: TPutCategoryRequestBody): Promise<void> {
       const { data } = await this.HttpClientService.put<void>(
         `${process.env.API_BASE_URL}/categories/${id}`,
         body
@@ -44,7 +44,15 @@ export class CategoryClient implements ICategoryClient {
       return data
   }
 
-  async deleteCategory(id: string): Promise<void> {
+  async updateCategoryStatus(id: TPutCategoryParam, body: TPutCategoryStatusRequestBody): Promise<void> {
+      const { data } = await this.HttpClientService.put<void>(
+        `${process.env.API_BASE_URL}/categories/${id}/status`,
+        body
+      )
+      return data
+  }
+
+  async deleteCategory(id: TDeleteCategoryParam): Promise<void> {
        const { data } = await this.HttpClientService.delete<void>(
         `${process.env.API_BASE_URL}/categories/${id}`,
       )
