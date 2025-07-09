@@ -1,10 +1,7 @@
-import { AxiosResponse } from "axios";
-import { IPostLoginResponse } from "cakes-lib-types-js";
-
-export interface IAuthService {
- login(email: string, password: string): Promise<AxiosResponse<IPostLoginResponse>>;
-}
+import { IPostLoginResponse, IPostRegisterResponse, TPostLoginRequestBody, TPostRegisterRequestBody} from 'cakes-lib-types-js';
 
 export interface IAuthClient {
-  login(email: string, password: string): Promise<AxiosResponse>;
+  login(body: TPostLoginRequestBody): Promise<IPostLoginResponse>
+  register(body: TPostRegisterRequestBody): Promise<IPostRegisterResponse>
 }
+ 

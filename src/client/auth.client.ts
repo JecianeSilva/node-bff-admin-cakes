@@ -1,6 +1,5 @@
-import { AxiosResponse } from 'axios';
 import { Inject, Injectable } from '@nestjs/common';
-import { IPostLoginResponse } from 'cakes-lib-types-js';
+import { IPostLoginResponse, TPostLoginRequestBody, TPostRegisterRequestBody, IPostRegisterResponse } from 'cakes-lib-types-js';
 import { IHttpClientService } from '../service/http-client.service';
 
 import { IAuthClient } from './interfaces/AuthInterface';
@@ -12,10 +11,19 @@ export class AuthClient implements IAuthClient {
     private readonly httpClientService: IHttpClientService,
   ) {}
 
-  async login(email: string, password: string): Promise<AxiosResponse<IPostLoginResponse>> {
-    return await this.httpClientService.post<IPostLoginResponse>(
+  async login(body: TPostLoginRequestBody): Promise<IPostLoginResponse> {
+    const { data } = await this.httpClientService.post<IPostLoginResponse>(
       `${process.env.API_BASE_URL}/auth/login`,
-      { email, password },
+      body,
     );
+    return data
+  }
+
+  async register(body: TPostRegisterRequestBody): Promise<IPostRegisterResponse> {
+       const { data } = await this.httpClientService.post<IPostRegisterResponse>(
+      `${process.env.API_BASE_URL}/auth/register`,
+      body,
+    );
+    return data
   }
 }
