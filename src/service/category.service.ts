@@ -1,6 +1,6 @@
 import { Inject, Injectable } from "@nestjs/common";
 import { ICategoryClient } from "../client/interfaces/categoryInterface";
-import { ICategory, IPostSaveCategoryResponse, TDeleteCategoryParam, TDeleteProductParamSchema, TGetCategoriesQueryParam, TGetCategoriesResponse, TPostSaveCategoryRequestBody, TPutCategoryParam, TPutCategoryRequestBody, TPutCategoryStatusRequestBody } from "cakes-lib-types-js";
+import { ICategory, IPostSaveCategoryResponse, TDeleteCategoryParam, TGetCategoriesQueryParam, TGetCategoriesResponse, TPostSaveCategoryRequestBody, TPutCategoryParam, TPutCategoryRequestBody, TPutCategoryStatusRequestBody } from "cakes-lib-types-js";
 
 export interface ICategoryService {
   getCategories(queryParams: TGetCategoriesQueryParam): Promise<TGetCategoriesResponse>
