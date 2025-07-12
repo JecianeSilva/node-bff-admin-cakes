@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { IPostLoginResponse, TPostLoginRequestBody, TPostRegisterRequestBody, IPostRegisterResponse } from 'cakes-lib-types-js';
+import { IPostLoginResponse, TPostLoginRequestBody, TPostRegisterRequestBody, IPostRegisterResponse, TPostRefreshTokentBody, IPostRefreshTokenResponse } from 'cakes-lib-types-js';
 import { IHttpClientService } from '../service/http-client.service';
 
 import { IAuthClient } from './interfaces/AuthInterface';
@@ -22,6 +22,14 @@ export class AuthClient implements IAuthClient {
   async register(body: TPostRegisterRequestBody): Promise<IPostRegisterResponse> {
        const { data } = await this.httpClientService.post<IPostRegisterResponse>(
       `${process.env.API_BASE_URL}/auth/register`,
+      body,
+    );
+    return data
+  }
+
+  async refreshToken(body: TPostRefreshTokentBody): Promise<IPostRefreshTokenResponse> {
+       const { data } = await this.httpClientService.post<IPostRefreshTokenResponse>(
+      `${process.env.API_BASE_URL}/auth/refresh-token`,
       body,
     );
     return data

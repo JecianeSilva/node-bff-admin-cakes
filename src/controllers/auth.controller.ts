@@ -1,5 +1,5 @@
 import { Body, Controller, HttpCode, Inject, Post } from '@nestjs/common';
-import { PostLoginRequestBodySchema, TPostLoginRequestBody, IPostLoginResponse, PostRegisterRequestBodySchema, TPostRegisterRequestBody, IPostRegisterResponse } from 'cakes-lib-types-js';
+import { PostLoginRequestBodySchema, TPostLoginRequestBody, IPostLoginResponse, PostRegisterRequestBodySchema, TPostRegisterRequestBody, IPostRegisterResponse, PostRefreshTokenRequestBodySchema, TPostRefreshTokentBody, IPostRefreshTokenResponse } from 'cakes-lib-types-js';
 import { ZodValidationPipe } from '../utils';
 import { IAuthService } from '../service/auth.service';
 
@@ -26,5 +26,14 @@ export class AuthController {
     body: TPostRegisterRequestBody,
   ): Promise<IPostRegisterResponse> {
     return await this.authService.register(body);
+  }
+
+  @Post('refresh-token')
+  @HttpCode(200)
+  async refreshToken(
+    @Body(new ZodValidationPipe(PostRefreshTokenRequestBodySchema)) 
+    body: TPostRefreshTokentBody,
+  ): Promise<IPostRefreshTokenResponse> {
+    return await this.authService.refreshToken(body);
   }
 }
