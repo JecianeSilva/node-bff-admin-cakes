@@ -20,6 +20,14 @@ export class HttpServiceInterceptor implements NestInterceptor {
     if (request.url === `${process.env.CONTEXTO}/auth/login` && request.method === 'POST') {
       return next.handle();
     }
+
+    if (request.url === `${process.env.CONTEXTO}/auth/register` && request.method === 'POST') {
+      return next.handle();
+    }
+
+    if (request.url === `${process.env.CONTEXTO}/auth/refresh-token` && request.method === 'POST') {
+      return next.handle();
+    }
     
     const authHeader: string | undefined = request.headers['authorization'];
     if (!authHeader) {
