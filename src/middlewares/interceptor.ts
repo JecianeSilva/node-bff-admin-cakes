@@ -16,26 +16,25 @@ export class HttpServiceInterceptor implements NestInterceptor {
     const ctx = context.switchToHttp();
     const request = ctx.getRequest();
     
-    
-    if (request.url === `${process.env.CONTEXTO}/auth/login` && request.method === 'POST') {
+    const allowedPaths = [
+      `${process.env.CONTEXTO}/auth/login`,
+      `${process.env.CONTEXTO}/auth/register`,
+      `${process.env.CONTEXTO}/auth/refresh-token`
+    ];
+
+    if (allowedPaths.includes(request.url) && request.method === 'POST') {
       return next.handle();
     }
 
-    if (request.url === `${process.env.CONTEXTO}/auth/register` && request.method === 'POST') {
-      return next.handle();
-    }
-
-    if (request.url === `${process.env.CONTEXTO}/auth/refresh-token` && request.method === 'POST') {
-      return next.handle();
-    }
-    
     const authHeader: string | undefined = request.headers['authorization'];
     if (!authHeader) {
       throw new UnauthorizedException('Authorization token missing');
     }
 
     this.httpService.axiosRef.defaults.headers.common['Authorization'] = authHeader;
+    this.httpService.axiosRef.defaults.headers.common['x-caller-id'] = 'bff-admin'; 
 
     return next.handle().pipe();
   }
 }
+

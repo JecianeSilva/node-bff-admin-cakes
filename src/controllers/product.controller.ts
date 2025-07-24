@@ -1,7 +1,7 @@
-import { Body, Controller, Delete, Get, HttpCode, Inject, Param, Post, Put, Query, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Headers, HttpCode, Inject, Param, Post, Put, Query, UseInterceptors } from '@nestjs/common';
 import { HttpServiceInterceptor } from '../middlewares/interceptor';
 import { ZodValidationPipe } from '../utils';
-import { GetProductQueryParamsSchema, IPostSaveProductResponse, IProduct, PostSaveProductRequestBodySchema, PutProductRequestBodySchema, TDeleteProductParam, TGetProductQueryParam, TGetProductsResponse, TPostSaveProductRequestBody, TPutProductRequestBody } from 'cakes-lib-types-js';
+import { GetProductQueryParamsSchema, IPostSaveProductResponse, IProduct, PostSaveProductRequestBodySchema, PutProductRequestBodySchema, TDeleteProductParam, TGetProductQueryParams, TGetProductsResponse, TPostSaveProductRequestBody, TPutProductRequestBody } from 'cakes-lib-types-js';
 import { IProductService } from '../service/product.service';
 
 @UseInterceptors(HttpServiceInterceptor)
@@ -14,10 +14,12 @@ export class ProductController {
   @Get()
   @HttpCode(200)
   async getProducts(
+    @Headers('x-caller-id') 
+    callerId?: string,
     @Query(new ZodValidationPipe(GetProductQueryParamsSchema))
-    queryParams: TGetProductQueryParam
+    queryParams?: TGetProductQueryParams
   ): Promise<TGetProductsResponse> {
-    return await this.productService.getProducts(queryParams)
+    return await this.productService.getProducts(queryParams, callerId)
   }
 
   @Get('/:id')

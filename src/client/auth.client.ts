@@ -28,7 +28,7 @@ export class AuthClient implements IAuthClient {
   }
 
   async refreshToken(body: TPostRefreshTokentBody): Promise<IPostRefreshTokenResponse> {
-       const { data } = await this.httpClientService.post<IPostRefreshTokenResponse>(
+    const { data } = await this.httpClientService.post<IPostRefreshTokenResponse>(
       `${process.env.API_BASE_URL}/auth/refresh-token`,
       body,
     );
