@@ -1,8 +1,9 @@
-import { Body, Controller, Delete, Get, HttpCode, Inject, Param, Post, Put, Query, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, Inject, Param, Post, Put, Query, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { HttpServiceInterceptor } from '../middlewares/interceptor';
 import { ZodValidationPipe } from '../utils';
 import { ICategoryService } from '../service/category.service';
 import { GetCategoriesQueryParamSchema, ICategory, IPostSaveCategoryResponse, PostSaveCategoryRequestBodySchema, PutCategoryRequestBodySchema, PutCategoryStatusRequestBodySchema, TDeleteCategoryParam, TGetCategoriesQueryParam, TGetCategoriesResponse, TPostSaveCategoryRequestBody, TPutCategoryParam, TPutCategoryRequestBody, TPutCategoryStatusRequestBody } from 'cakes-lib-types-js';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @UseInterceptors(HttpServiceInterceptor)
 @Controller('/category')
@@ -32,22 +33,28 @@ export class CategoryController {
 
   @Post()
   @HttpCode(201)
+  @UseInterceptors(FileInterceptor('image'))
   async postSaveCategory(
     @Body(new ZodValidationPipe(PostSaveCategoryRequestBodySchema))
-    body: TPostSaveCategoryRequestBody
+    body: TPostSaveCategoryRequestBody,
+    @UploadedFile() 
+    image?: Express.Multer.File,
   ): Promise<IPostSaveCategoryResponse> {
-    return await this.categoryService.postSaveCategory(body)
+    return await this.categoryService.postSaveCategory(body, image)
   }
 
   @Put('/:id')
   @HttpCode(200)
+  @UseInterceptors(FileInterceptor('image'))
   async updatedCategory(
     @Param('id')
     id: TPutCategoryParam,
     @Body(new ZodValidationPipe(PutCategoryRequestBodySchema))
-    body: TPutCategoryRequestBody
+    body: TPutCategoryRequestBody,
+    @UploadedFile() 
+    image?: Express.Multer.File,
   ): Promise<void> {
-    return await this.categoryService.updateCategory(id, body)
+    return await this.categoryService.updateCategory(id, body, image)
   }
 
   @Put('/:id/status')

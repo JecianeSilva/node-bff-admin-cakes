@@ -5,8 +5,8 @@ import { ICategory, IPostSaveCategoryResponse, TDeleteCategoryParam, TGetCategor
 export interface ICategoryService {
   getCategories(queryParams: TGetCategoriesQueryParam): Promise<TGetCategoriesResponse>
   getCategoryById(id: string): Promise<ICategory>
-  postSaveCategory(body: TPostSaveCategoryRequestBody): Promise<IPostSaveCategoryResponse>
-  updateCategory(id: TPutCategoryParam, body: TPutCategoryRequestBody): Promise<void>
+  postSaveCategory(body: TPostSaveCategoryRequestBody, image: any): Promise<IPostSaveCategoryResponse>
+  updateCategory(id: TPutCategoryParam, body: TPutCategoryRequestBody, image: any): Promise<void>
   updateCategoryStatus(id: TPutCategoryParam, status: TPutCategoryStatusRequestBody): Promise<void>;
   deleteCategory(id: TDeleteCategoryParam): Promise<void>
 }
@@ -26,12 +26,12 @@ export class CategoryService implements ICategoryService {
       return await this.categoryClient.getCategoryById(id)
   }
 
-  async postSaveCategory(body: TPostSaveCategoryRequestBody): Promise<IPostSaveCategoryResponse> {
-      return await this.categoryClient.postSaveCategory(body)
+  async postSaveCategory(body: TPostSaveCategoryRequestBody, image: any): Promise<IPostSaveCategoryResponse> {
+      return await this.categoryClient.postSaveCategory(body, image)
   }
 
-  async updateCategory(id: TPutCategoryParam, body: TPutCategoryRequestBody): Promise<void> {
-      return await this.categoryClient.updateCategory(id, body)
+  async updateCategory(id: TPutCategoryParam, body: TPutCategoryRequestBody, image: any): Promise<void> {
+      return await this.categoryClient.updateCategory(id, body, image)
   }
 
   async updateCategoryStatus(id: TPutCategoryParam, body: TPutCategoryStatusRequestBody): Promise<void> {

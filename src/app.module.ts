@@ -18,6 +18,9 @@ import { CategoryController } from './controllers/category.controller';
 import { HttpClientService } from './service/http-client.service';
 import { HttpServiceInterceptor } from './middlewares/interceptor';
 import config from './config/config';
+import { UsersClient } from './client/user.client';
+import { UserService } from './service/user.service';
+import { UserController } from './controllers/user.controller';
 
 @Module({
   imports: [
@@ -30,6 +33,7 @@ import config from './config/config';
     AuthController,
     ProductController,
     CategoryController,
+    UserController
   ],
   providers: [
     {
@@ -47,6 +51,14 @@ import config from './config/config';
     {
       provide: APP_INTERCEPTOR,
       useClass: HttpServiceInterceptor,
+    },
+    {
+      provide: 'IUsersClient',
+      useClass: UsersClient,
+    },
+    {
+      provide: 'IUserService',
+      useClass: UserService
     },
     {
       provide: 'IProductsClient',

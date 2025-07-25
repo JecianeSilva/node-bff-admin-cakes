@@ -1,4 +1,5 @@
 import { IHttpClientService } from '../service/http-client.service';
+import FormData from 'form-data';
 import { Inject, Injectable } from "@nestjs/common";
 import { queryString } from '../utils/queryString';
 import { ICategoryClient } from './interfaces/categoryInterface';
@@ -12,11 +13,10 @@ export class CategoryClient implements ICategoryClient {
   ) {}
 
   async getCategories(
-    queryParams: TGetCategoriesQueryParam
+    queryParams?: TGetCategoriesQueryParam
   ): Promise<TGetCategoriesResponse> {
-    const { status } = queryParams
     const { data } = await this.HttpClientService.get<TGetCategoriesResponse>(
-      `${process.env.API_BASE_URL}/categories?${queryString.encode({status})}`,
+      `${process.env.API_BASE_URL}/categories?${queryString.encode(queryParams)}`,
     )
     return data
   }
@@ -28,18 +28,42 @@ export class CategoryClient implements ICategoryClient {
       return data
   }
 
-  async postSaveCategory(body: TPostSaveCategoryRequestBody): Promise<IPostSaveCategoryResponse> {
-      const { data } = await this.HttpClientService.post<IPostSaveCategoryResponse>(
+  async postSaveCategory(body: TPostSaveCategoryRequestBody, image: any): Promise<IPostSaveCategoryResponse> {
+    const formData = new FormData();
+    formData.append('name', body.name);
+    if (body.description) {
+      formData.append('description', body.description);
+    }
+    if (image) {
+      formData.append('image', image.buffer, image.originalname);
+    }
+    const { data } = await this.HttpClientService.post<IPostSaveCategoryResponse>(
         `${process.env.API_BASE_URL}/categories`,
-        body
+        formData, {
+          headers: {
+            ...formData.getHeaders(),
+          }
+        }
       )
       return data
   }
 
-  async updateCategory(id: TPutCategoryParam, body: TPutCategoryRequestBody): Promise<void> {
-      const { data } = await this.HttpClientService.put<void>(
+  async updateCategory(id: TPutCategoryParam, body: TPutCategoryRequestBody, image: any): Promise<void> {
+    const formData = new FormData();
+    if (body.name) formData.append('name', body.name);
+    if (body.description) formData.append('description', body.description);
+    if (body.status) formData.append('status', body.status);
+    if (image) {
+      formData.append('image', image.buffer, image.originalname);
+    }
+    const { data } = await this.HttpClientService.put<void>(
         `${process.env.API_BASE_URL}/categories/${id}`,
-        body
+        formData, 
+        {
+          headers: {
+            ...formData.getHeaders(),
+          },
+        }
       )
       return data
   }
