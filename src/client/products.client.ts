@@ -2,7 +2,7 @@ import { IProductsClient } from './interfaces/ProductInterface';
 import { IHttpClientService } from '../service/http-client.service';
 import { Inject, Injectable } from "@nestjs/common";
 import { queryString } from '../utils/queryString';
-import { IPostSaveProductResponse, IProduct, TDeleteProductParam, TGetProductQueryParams, TGetProductsResponse, TPostSaveProductRequestBody, TPutProductRequestBody } from 'cakes-lib-types-js';
+import { IPostSaveProductResponse, IProduct, TGetProductQueryParams, TGetProductsResponse, TPostSaveProductRequestBody, TPutProductRequestBody } from 'cakes-lib-types-js';
 
 @Injectable()
 export class ProductsClient implements IProductsClient {
@@ -41,7 +41,7 @@ export class ProductsClient implements IProductsClient {
       return data
   }
 
-  async deleteProduct(id: TDeleteProductParam): Promise<void> {
+  async deleteProduct(id: string): Promise<void> {
       const { data } = await this.HttpClientService.delete<void>(
         `${process.env.API_BASE_URL}/products/${id}`,
       )

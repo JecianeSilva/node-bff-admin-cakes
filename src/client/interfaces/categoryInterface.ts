@@ -1,4 +1,4 @@
-import { ICategory, TGetCategoriesQueryParam, TGetCategoriesResponse, IPostSaveCategoryResponse, TPutCategoryStatusRequestBody, TPostSaveCategoryRequestBody, TPutCategoryParam, TDeleteCategoryParam, TPutCategoryRequestBody } from "cakes-lib-types-js"
+import { ICategory, TGetCategoriesQueryParam, TGetCategoriesResponse, IPostSaveCategoryResponse, TPutCategoryStatusRequestBody, TPostSaveCategoryRequestBody, TPutCategoryParam, TPutCategoryRequestBody } from "cakes-lib-types-js"
 
 export interface ICategoryClient {
   getCategories(queryParams?: TGetCategoriesQueryParam): Promise<TGetCategoriesResponse>
@@ -6,5 +6,5 @@ export interface ICategoryClient {
   postSaveCategory(body: TPostSaveCategoryRequestBody, image: any): Promise<IPostSaveCategoryResponse>
   updateCategory(id: TPutCategoryParam, body: TPutCategoryRequestBody, image: any): Promise<void>
   updateCategoryStatus(id: TPutCategoryParam, status: TPutCategoryStatusRequestBody): Promise<void>;
-  deleteCategory(id: TDeleteCategoryParam): Promise<void>
+  deleteCategory(id: string): Promise<void>
 }

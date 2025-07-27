@@ -1,14 +1,13 @@
 import { Inject, Injectable } from "@nestjs/common";
-import { IPostSaveProductResponse, IProduct, TDeleteProductParam, TGetProductQueryParams, TGetProductsResponse, TPostSaveProductRequestBody, TPutProductRequestBody } from "cakes-lib-types-js";
+import { IPostSaveProductResponse, IProduct, TGetProductQueryParams, TGetProductsResponse, TPostSaveProductRequestBody, TPutProductRequestBody } from "cakes-lib-types-js";
 import { IProductsClient } from "../client/interfaces/ProductInterface";
-import { mapperProducts } from "../utils";
 
 export interface IProductService {
-  getProducts(queryParams: TGetProductQueryParams, callerId: string | undefined): Promise<TGetProductsResponse>
+  getProducts(queryParams: TGetProductQueryParams): Promise<TGetProductsResponse>
   getProductById(id: string): Promise<IProduct>
   postSaveProduct(body: TPostSaveProductRequestBody): Promise<IPostSaveProductResponse>
   updatedProduct(id: string, body: TPutProductRequestBody): Promise<void>
-  deleteProduct(id: TDeleteProductParam): Promise<void>
+  deleteProduct(id: string): Promise<void>
 }
 
 @Injectable()
@@ -18,11 +17,8 @@ export class ProductService implements IProductService {
     private readonly productsClient: IProductsClient
   ) {}
 
-  async getProducts(queryParams: TGetProductQueryParams, callerId: string | undefined): Promise<TGetProductsResponse> {
+  async getProducts(queryParams: TGetProductQueryParams): Promise<TGetProductsResponse> {
     const data = await this.productsClient.getProducts(queryParams)
-    if (callerId === 'bff-page') {
-      return mapperProducts(data as IProduct[]);
-    }
     return data
   }
 
@@ -41,7 +37,7 @@ export class ProductService implements IProductService {
       return data
   }
 
-  async deleteProduct(id: TDeleteProductParam): Promise<void> {
+  async deleteProduct(id: string): Promise<void> {
        const data = await this.productsClient.deleteProduct(id)
       return data
   }

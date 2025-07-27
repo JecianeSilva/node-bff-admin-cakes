@@ -3,7 +3,7 @@ import FormData from 'form-data';
 import { Inject, Injectable } from "@nestjs/common";
 import { queryString } from '../utils/queryString';
 import { ICategoryClient } from './interfaces/categoryInterface';
-import { ICategory, IPostSaveCategoryResponse, TDeleteCategoryParam, TGetCategoriesQueryParam, TGetCategoriesResponse, TPostSaveCategoryRequestBody, TPutCategoryParam, TPutCategoryRequestBody, TPutCategoryStatusRequestBody } from 'cakes-lib-types-js';
+import { ICategory, IPostSaveCategoryResponse, TGetCategoriesQueryParam, TGetCategoriesResponse, TPostSaveCategoryRequestBody, TPutCategoryParam, TPutCategoryRequestBody, TPutCategoryStatusRequestBody } from 'cakes-lib-types-js';
 
 @Injectable()
 export class CategoryClient implements ICategoryClient {
@@ -76,7 +76,7 @@ export class CategoryClient implements ICategoryClient {
       return data
   }
 
-  async deleteCategory(id: TDeleteCategoryParam): Promise<void> {
+  async deleteCategory(id: string): Promise<void> {
        const { data } = await this.HttpClientService.delete<void>(
         `${process.env.API_BASE_URL}/categories/${id}`,
       )

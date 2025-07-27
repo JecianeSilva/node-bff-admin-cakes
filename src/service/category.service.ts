@@ -1,6 +1,6 @@
 import { Inject, Injectable } from "@nestjs/common";
 import { ICategoryClient } from "../client/interfaces/categoryInterface";
-import { ICategory, IPostSaveCategoryResponse, TDeleteCategoryParam, TGetCategoriesQueryParam, TGetCategoriesResponse, TPostSaveCategoryRequestBody, TPutCategoryParam, TPutCategoryRequestBody, TPutCategoryStatusRequestBody } from "cakes-lib-types-js";
+import { ICategory, IPostSaveCategoryResponse, TGetCategoriesQueryParam, TGetCategoriesResponse, TPostSaveCategoryRequestBody, TPutCategoryParam, TPutCategoryRequestBody, TPutCategoryStatusRequestBody } from "cakes-lib-types-js";
 
 export interface ICategoryService {
   getCategories(queryParams: TGetCategoriesQueryParam): Promise<TGetCategoriesResponse>
@@ -8,7 +8,7 @@ export interface ICategoryService {
   postSaveCategory(body: TPostSaveCategoryRequestBody, image: any): Promise<IPostSaveCategoryResponse>
   updateCategory(id: TPutCategoryParam, body: TPutCategoryRequestBody, image: any): Promise<void>
   updateCategoryStatus(id: TPutCategoryParam, status: TPutCategoryStatusRequestBody): Promise<void>;
-  deleteCategory(id: TDeleteCategoryParam): Promise<void>
+  deleteCategory(id: string): Promise<void>
 }
 
 @Injectable()
@@ -38,7 +38,7 @@ export class CategoryService implements ICategoryService {
       return await this.categoryClient.updateCategoryStatus(id, body)
   }
 
-  async deleteCategory(id: TDeleteCategoryParam): Promise<void> {
+  async deleteCategory(id: string): Promise<void> {
       return await this.categoryClient.deleteCategory(id)
   }
 }

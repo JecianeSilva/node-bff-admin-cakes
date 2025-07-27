@@ -17,16 +17,16 @@ import { CategoryController } from './controllers/category.controller';
 
 import { HttpClientService } from './service/http-client.service';
 import { HttpServiceInterceptor } from './middlewares/interceptor';
-import config from './config/config';
 import { UsersClient } from './client/user.client';
 import { UserService } from './service/user.service';
 import { UserController } from './controllers/user.controller';
+import CONFIG from './config/config';
 
 @Module({
   imports: [
     HttpModule,
     ConfigModule.forRoot({
-      load: [config],
+       load: [() => CONFIG],
     }),
   ],
   controllers: [

@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, HttpCode, Inject, Param, Post, Put, Quer
 import { HttpServiceInterceptor } from '../middlewares/interceptor';
 import { ZodValidationPipe } from '../utils';
 import { ICategoryService } from '../service/category.service';
-import { GetCategoriesQueryParamSchema, ICategory, IPostSaveCategoryResponse, PostSaveCategoryRequestBodySchema, PutCategoryRequestBodySchema, PutCategoryStatusRequestBodySchema, TDeleteCategoryParam, TGetCategoriesQueryParam, TGetCategoriesResponse, TPostSaveCategoryRequestBody, TPutCategoryParam, TPutCategoryRequestBody, TPutCategoryStatusRequestBody } from 'cakes-lib-types-js';
+import { GetCategoriesQueryParamSchema, ICategory, IPostSaveCategoryResponse, PostSaveCategoryRequestBodySchema, PutCategoryRequestBodySchema, PutCategoryStatusRequestBodySchema, TGetCategoriesQueryParam, TGetCategoriesResponse, TPostSaveCategoryRequestBody, TPutCategoryParam, TPutCategoryRequestBody, TPutCategoryStatusRequestBody } from 'cakes-lib-types-js';
 import { FileInterceptor } from '@nestjs/platform-express';
 
 @UseInterceptors(HttpServiceInterceptor)
@@ -70,7 +70,7 @@ export class CategoryController {
   @HttpCode(200)
   async deleteCategory(
     @Param('id')
-    id: TDeleteCategoryParam
+    id: string
   ): Promise<void> {
     return await this.categoryService.deleteCategory(id)
   }
