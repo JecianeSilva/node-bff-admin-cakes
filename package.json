@@ -1,6 +1,6 @@
 {
-  "name": "node-bff-website-cakes",
-  "aplicacao": "node-bff-website-cakes",
+  "name": "node-bff-admin-cakes",
+  "aplicacao": "node-bff-admin-cakes",
   "private": "true",
   "version": "0.0.1",
   "license": "UNLICENSED",
@@ -17,7 +17,7 @@
     "@nestjs/core": "^11.1.3",
     "@nestjs/platform-express": "^11.1.3",
     "axios": "^1.10.0",
-    "cakes-lib-types-js": "file:./packages/cakes-lib-types-js-0.0.25.tgz",
+    "cakes-lib-types-js": "file:./packages/cakes-lib-types-js-0.0.28.tgz",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.2",
     "cors": "^2.8.5",
