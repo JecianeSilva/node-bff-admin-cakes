@@ -1,8 +1,9 @@
-import { Body, Controller, Delete, Get, Headers, HttpCode, Inject, Param, Post, Put, Query, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Headers, HttpCode, Inject, Param, Post, Put, Query, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { HttpServiceInterceptor } from '../middlewares/interceptor';
 import { ZodValidationPipe } from '../utils';
 import { GetProductQueryParamsSchema, IPostSaveProductResponse, IProduct, PostSaveProductRequestBodySchema, PutProductRequestBodySchema, TGetProductQueryParams, TGetProductsResponse, TPostSaveProductRequestBody, TPutProductRequestBody } from 'cakes-lib-types-js';
 import { IProductService } from '../service/product.service';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @UseInterceptors(HttpServiceInterceptor)
 @Controller('/product')
@@ -31,22 +32,28 @@ export class ProductController {
 
   @Post()
   @HttpCode(201)
+  @UseInterceptors(FileInterceptor('image'))
   async postSaveProduct(
     @Body(new ZodValidationPipe(PostSaveProductRequestBodySchema))
-    body: TPostSaveProductRequestBody
+    body: TPostSaveProductRequestBody,
+    @UploadedFile() 
+    image?: Express.Multer.File,
   ): Promise<IPostSaveProductResponse> {
-    return await this.productService.postSaveProduct(body)
+    return await this.productService.postSaveProduct(body, image)
   }
 
   @Put('/:id')
   @HttpCode(200)
+  @UseInterceptors(FileInterceptor('image'))
   async updatedProduct(
     @Param('id')
     id: string,
     @Body(new ZodValidationPipe(PutProductRequestBodySchema))
-    body: TPutProductRequestBody
+    body: TPutProductRequestBody,
+    @UploadedFile() 
+    image?: Express.Multer.File,
   ): Promise<void> {
-    return await this.productService.updatedProduct(id, body)
+    return await this.productService.updatedProduct(id, body, image)
   }
 
   @Delete('/:id')

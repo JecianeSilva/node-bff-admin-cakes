@@ -3,7 +3,7 @@ import { IPostSaveProductResponse, IProduct, TGetProductQueryParams, TGetProduct
 export interface IProductsClient {
   getProducts(queryParams: TGetProductQueryParams): Promise<TGetProductsResponse>
   getProductById(id: string): Promise<IProduct>
-  postSaveProduct(body: TPostSaveProductRequestBody): Promise<IPostSaveProductResponse>
-  updatedProduct(id: string, body: TPutProductRequestBody): Promise<void>
+  postSaveProduct(body: TPostSaveProductRequestBody, image: any): Promise<IPostSaveProductResponse>
+  updatedProduct(id: string, body: TPutProductRequestBody, image: any): Promise<void>
   deleteProduct(id: string): Promise<void>
 }

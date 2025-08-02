@@ -3,6 +3,7 @@ import { IHttpClientService } from '../service/http-client.service';
 import { Inject, Injectable } from "@nestjs/common";
 import { queryString } from '../utils/queryString';
 import { IPostSaveProductResponse, IProduct, TGetProductQueryParams, TGetProductsResponse, TPostSaveProductRequestBody, TPutProductRequestBody } from 'cakes-lib-types-js';
+import FormData from 'form-data';
 
 @Injectable()
 export class ProductsClient implements IProductsClient {
@@ -11,7 +12,7 @@ export class ProductsClient implements IProductsClient {
     private readonly HttpClientService: IHttpClientService
   ) {}
 
-  async getProducts(queryParams: TGetProductQueryParams): Promise<TGetProductsResponse> {
+  async getProducts(queryParams: TGetProductQueryParams, ): Promise<TGetProductsResponse> {
     const { data } = await this.HttpClientService.get<TGetProductsResponse>(
       `${process.env.API_BASE_URL}/products?${queryString.encode(queryParams)}`,
     )
@@ -25,16 +26,63 @@ export class ProductsClient implements IProductsClient {
     return data
   }
 
-  async postSaveProduct(body: TPostSaveProductRequestBody): Promise<IPostSaveProductResponse> {
+  async postSaveProduct(body: TPostSaveProductRequestBody, image: any): Promise<IPostSaveProductResponse> {
+    const formData = new FormData();
+    formData.append('name', body.name);
+    formData.append('price', body.price);
+    formData.append('categoryId', body.categoryId);
+
+    if (body.description) {
+      formData.append('description', body.description);
+    }
+    if (body.flavor) {
+      formData.append('flavor', body.flavor);
+    }
+    if (body.size) {
+      formData.append('size', body.size);
+    }
+    if (body.filling) {
+      formData.append('filling', body.filling);
+    }
+    if (body.dough) {
+      formData.append('dough', body.dough);
+    }
+    if (body.status) {
+      formData.append('status', body.status);
+    }
+
+    if (image) {
+      formData.append('image', image.buffer, image.originalname);
+    }
     const { data } = await this.HttpClientService.post<IPostSaveProductResponse>(
       `${process.env.API_BASE_URL}/products/`,
-      body
+      formData, {
+        headers: {
+          ...formData.getHeaders(),
+        }
+      }
     )
     return data
   }
 
-  async updatedProduct(id: string, body: TPutProductRequestBody): Promise<void> {
-      const { data } = await this.HttpClientService.put<void>(
+  async updatedProduct(id: string, body: TPutProductRequestBody, image: any): Promise<void> {
+      
+    const formData = new FormData();
+    if (body.name) formData.append('name', body.name);
+    if (body.description) formData.append('description', body.description);
+    if (body.price) formData.append('price', body.price);
+    if (body.categoryId) formData.append('categoryId', body.categoryId);
+    if (body.description) formData.append('description', body.description);
+    if (body.flavor) formData.append('flavor', body.flavor);
+    if (body.size) formData.append('size', body.size);
+    if (body.filling) formData.append('filling', body.filling); 
+    if (body.dough) formData.append('dough', body.dough);
+    if (body.status) formData.append('status', body.status);
+    
+    if (image) {
+      formData.append('image', image.buffer, image.originalname);
+    }
+    const { data } = await this.HttpClientService.put<void>(
         `${process.env.API_BASE_URL}/products/${id}`,
         body
       )

@@ -5,8 +5,8 @@ import { IProductsClient } from "../client/interfaces/ProductInterface";
 export interface IProductService {
   getProducts(queryParams: TGetProductQueryParams): Promise<TGetProductsResponse>
   getProductById(id: string): Promise<IProduct>
-  postSaveProduct(body: TPostSaveProductRequestBody): Promise<IPostSaveProductResponse>
-  updatedProduct(id: string, body: TPutProductRequestBody): Promise<void>
+  postSaveProduct(body: TPostSaveProductRequestBody, image: any): Promise<IPostSaveProductResponse>
+  updatedProduct(id: string, body: TPutProductRequestBody, image: any): Promise<void>
   deleteProduct(id: string): Promise<void>
 }
 
@@ -27,13 +27,13 @@ export class ProductService implements IProductService {
       return data
   }
 
-  async postSaveProduct(body: TPostSaveProductRequestBody): Promise<IPostSaveProductResponse> {
-      const data = await this.productsClient.postSaveProduct(body)
+  async postSaveProduct(body: TPostSaveProductRequestBody, image: any): Promise<IPostSaveProductResponse> {
+      const data = await this.productsClient.postSaveProduct(body, image)
       return data
   }
 
-  async updatedProduct(id: string, body: TPutProductRequestBody): Promise<void> {
-      const data = await this.productsClient.updatedProduct(id, body)
+  async updatedProduct(id: string, body: TPutProductRequestBody, image: any): Promise<void> {
+      const data = await this.productsClient.updatedProduct(id, body, image)
       return data
   }
 
